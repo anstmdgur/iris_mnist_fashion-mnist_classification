@@ -1,0 +1,17 @@
+mnist:
+  CNN:
+    flatten_size: 3136  # 28x28 -> 풀링 2번(7x7) * 채널 64개 = 3136
+    output_dim: 10
+    fc_hidden_dim: 256
+    hidden_layer: [32, 64]
+    dropout_p: 0.25
+    dropout_output_p: 0.5
+    bn: True
+    lr: 0.001           # pop으로 뽑아서 쓸 예정
+    epochs: 20
+
+
+
+    with open('config.yaml','r') as f:
+        config = yaml.safe_load(f)
+    cfg = config[dataset][model]
