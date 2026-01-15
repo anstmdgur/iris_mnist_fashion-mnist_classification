@@ -1,17 +1,29 @@
-mnist:
-  CNN:
-    flatten_size: 3136  # 28x28 -> 풀링 2번(7x7) * 채널 64개 = 3136
-    output_dim: 10
-    fc_hidden_dim: 256
-    hidden_layer: [32, 64]
-    dropout_p: 0.25
-    dropout_output_p: 0.5
-    bn: True
-    lr: 0.001           # pop으로 뽑아서 쓸 예정
+iris_mlp:
+  model : "mlp"
+  parameters:
+    dropout_p: 0.2
+    bn: true
+  train_parameters:
+    batch_size: 16
+    lr: 0.01
+    epochs: 50
+
+mnist_mlp:
+  model : "mlp"
+  parameters:
+    dropout_p: 0.2
+    bn: true
+  train_parameters:
+    batch_size: 32
+    lr: 0.001
     epochs: 20
 
-
-
-    with open('config.yaml','r') as f:
-        config = yaml.safe_load(f)
-    cfg = config[dataset][model]
+mnist_cnn:
+  model : "cnn"
+  parameters:
+    dropout_p: 0.2
+    bn: true
+  train_parameters:
+    batch_size: 32
+    lr: 0.001
+    epochs: 20

@@ -39,6 +39,8 @@ def getDataset(dataset,batchsize):
             x = torch.tensor(iris.data, dtype = torch.float32)
             y = torch.tensor(iris.target, dtype = torch.long)
 
+            # y = torch.nn.functional.one_hot(y, num_classes=3).float()
+
             full_iris = TensorDataset(x,y)
 
             total_size = len(full_iris)
@@ -53,3 +55,8 @@ def getDataset(dataset,batchsize):
             test_data_loader = DataLoader(dataset=test, batch_size=batchsize,shuffle=True)
 
             return train_data_loader,validation_data_loader,test_data_loader,dataset
+        
+def data_select(config):
+    
+
+train_data_loader, validation_data_loader, test_data_loader, dataset = data_select()
