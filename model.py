@@ -1,10 +1,5 @@
-import torch
+
 from torch import nn
-import datasets
-
-
-# device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
 
 #lr, batchsize, optimizer, lr scheduler, dropout p, weight regularization?, relu
 
@@ -67,7 +62,14 @@ class CnnModel(nn.Module):
         prediction = self.stack(x)
         return prediction
     
-def model_select(config):
+def model_select(config,device):
     model_type = config['model']
     parameters = config['parameters']
+
+    if model_type == "iris_MLP":
+        return IrisMlpModel(**parameters).to(device)
+    elif model_type == "MNIST_MLP":
+        return MnistMlpModel(**parameters).to(device)
+    elif model_type == "CNN":
+        return CnnModel(**parameters).to(device)
 

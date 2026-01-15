@@ -1,29 +1,35 @@
 iris_mlp:
-  model : "mlp"
+  model : "iris_MLP"
   parameters:
     dropout_p: 0.2
     bn: true
   train_parameters:
-    batch_size: 16
     lr: 0.01
     epochs: 50
+  data_parameters:
+    dataset: "iris"
+    batch_size: 16
 
 mnist_mlp:
-  model : "mlp"
+  model : "MNIST_MLP"
   parameters:
     dropout_p: 0.2
     bn: true
   train_parameters:
-    batch_size: 32
     lr: 0.001
     epochs: 20
+  data_parameters:
+    dataset: "MNIST"
+    batch_size: 32
 
 mnist_cnn:
-  model : "cnn"
+  model : "CNN"
   parameters:
     dropout_p: 0.2
     bn: true
   train_parameters:
-    batch_size: 32
     lr: 0.001
     epochs: 20
+  data_parameters:
+    dataset: "fashion-MNIST"
+    batch_size: 32
