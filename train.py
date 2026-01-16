@@ -98,7 +98,7 @@ def model_evaluate(dataloader,model,device,config):
     return val_avg_loss,val_avg_accuracy
 
 class EarlyStopping(): #함수가 아닌 class로 정의하는 이유는 이전 state를 기억하기 위함 (best_score, epoch)
-    def __init__(self,patience = 5, delta = 0.0, path = 'checkpoint.pt',verbose = True):
+    def __init__(self,patience = 5, delta = 0.0, path = './as_lab_project_1/checkpoint/checkpoint.pt',verbose = True):
         self.patience = patience #성능이 향상되지 않아도 참을 횟수
         self.delta = delta #성능 향상을 인정할 최소 값
         self.path = path #모델(체크포인트) 저장 경로
