@@ -62,7 +62,7 @@ class CnnModel(nn.Module):
         prediction = self.stack(x)
         return prediction
     
-def model_select(config,device): #config [model_parameters]
+def select_model(config,device): #config [model_parameters]
     parameters = config.copy()
     model_type = parameters.pop('model')
 

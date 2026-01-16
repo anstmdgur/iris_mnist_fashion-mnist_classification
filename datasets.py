@@ -4,9 +4,9 @@ from torch.utils.data import TensorDataset,DataLoader,random_split
 from torchvision import datasets,transforms
 
 
-def getDataset(config): #config[data_parameters]
+def select_dataset(config): #config[data_parameters]
     dataset = config['dataset']
-    batchsize = config['batchsize']
+    batchsize = config['batch_size']
     match dataset:
         case "MNIST":
             train = datasets.MNIST(root='./data',train=True, download=True, transform=transforms.ToTensor())
@@ -75,4 +75,3 @@ def getDataset(config): #config[data_parameters]
             return train_data_loader,validation_data_loader,test_data_loader,dataset
         
 
-# train_data_loader, validation_data_loader, test_data_loader, dataset = data_select()

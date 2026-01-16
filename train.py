@@ -13,9 +13,9 @@ def select_optimizer(model,config): #config[train_parameters]
         return optim.Adam(model.parameters(),lr=learning_rate)
 
 
-def model_train(dataloader,model,loss_func,optimizer,device,config): #config[train_parameters]
+def model_train(dataloader,model,optimizer,device,config): #config[train_parameters]
 
-    model.train()
+    model.train()#dropout과 bn에 대해서 전부 활성화가 되도록 레이어 동작 방식을 설정함
 
     loss_type = config.get('loss_type','CE')
 
@@ -24,6 +24,8 @@ def model_train(dataloader,model,loss_func,optimizer,device,config): #config[tra
 
     if loss_type == "MSE":
         loss_func = nn.MSELoss()
+    else:
+        loss_func = nn.CrossEntropyLoss()
 
     for image,label in dataloader:
         x_train = image.to(device)
@@ -58,15 +60,21 @@ def model_train(dataloader,model,loss_func,optimizer,device,config): #config[tra
 
     return train_avg_loss,train_avg_accuracy
 
-def model_evaluate(dataloader,model,loss_func,device,loss_type = "CE"):
-    model.eval()
+def model_evaluate(dataloader,model,device,config):
+    model.eval() #dropout은 비활성화 하여 모든 뉴런을 사용하며, bn은 학습 시에 저장해둔
+    #각 평균과 분산을 가져와서 사용함. test,validation데이터에 대해 통계를 쓰지 않으며,
+    #학습 시에 진행해둔 
 
-    with torch.no_grad():
+    loss_type = config.get('loss_type','CE')
+
+    with torch.no_grad(): #autograd에게 미분계산할 필요 없다고 알려줌. 각 tensor의 grad속성이 업데이트되지 않음.
 
         val_loss_sum = val_correct = val_total = 0
         total_val_batch = len(dataloader)
         if loss_type == "MSE":
             loss_func = nn.MSELoss()
+        else:
+            loss_func = nn.CrossEntropyLoss()
         
         for image,label in dataloader: 
             x_val = image.to(device)
@@ -77,13 +85,13 @@ def model_evaluate(dataloader,model,loss_func,device,loss_type = "CE"):
                 output = nn.functional.softmax(output,dim=1) 
                 y_one_hot = nn.functional.one_hot(y_val,num_classes=output.size(1)).float()
                 loss = loss_func(output,y_one_hot)
-        else:
-            loss = loss_func(output,y_val)
-        val_loss_sum += loss.item()
+            else:
+                loss = loss_func(output,y_val)
+            val_loss_sum += loss.item()
 
-        val_total += y_val.size(0)
-        val_correct += ((torch.argmax(output,1)) == y_val).sum().item() 
-    
+            val_total += y_val.size(0)
+            val_correct += ((torch.argmax(output,1)) == y_val).sum().item() 
+        
     val_avg_loss = val_loss_sum / total_val_batch
     val_avg_accuracy = 100*val_correct / val_total 
 

@@ -1,6 +1,20 @@
+# iris_mlp(default):
+#   model_parameters:
+#     model : "iris_MLP"
+#     dropout_p: 0.2
+#     bn: true
+#   train_parameters:
+#     lr: 0.01
+#     epochs: 50
+#     optim : "SGD" (optim 미지정 시 Adam자동 선택)
+#     loss_type : "MSE" (loss_type 미지정 시 CE 자동 선택)
+#   data_parameters:
+#     dataset: "iris"
+#     batch_size: 16
+
 iris_mlp:
-  model : "iris_MLP"
-  parameters:
+  model_parameters:
+    model : "iris_MLP"
     dropout_p: 0.2
     bn: true
   train_parameters:
@@ -12,7 +26,7 @@ iris_mlp:
 
 mnist_mlp:
   model : "MNIST_MLP"
-  parameters:
+  model_parameters:
     dropout_p: 0.2
     bn: true
   train_parameters:
@@ -24,7 +38,7 @@ mnist_mlp:
 
 mnist_cnn:
   model : "CNN"
-  parameters:
+  model_parameters:
     dropout_p: 0.2
     bn: true
   train_parameters:
