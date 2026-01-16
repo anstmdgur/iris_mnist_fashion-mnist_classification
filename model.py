@@ -62,9 +62,9 @@ class CnnModel(nn.Module):
         prediction = self.stack(x)
         return prediction
     
-def model_select(config,device):
-    model_type = config['model']
-    parameters = config['parameters']
+def model_select(config,device): #config [model_parameters]
+    parameters = config.copy()
+    model_type = parameters.pop('model')
 
     if model_type == "iris_MLP":
         return IrisMlpModel(**parameters).to(device)
