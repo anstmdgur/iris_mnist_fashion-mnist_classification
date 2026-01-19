@@ -62,7 +62,7 @@ def plot_confusion_matrix(model,dataloader,device,classes,save_path = './as_lab_
 
 def plot_misclassified_images(model,dataloader,device,classes,num_images = 25,save_path = './as_lab_project_1/plot/misclassified_images.png'):
     model.eval()
-
+    #data augmentation을 통해서 기울어지거나 노이즈가 있는 이미지에 대해서도 학습시켜 모델의 견고성을 높일수있다.
     misclassified_images = []
     misclassified_true = []
     misclassified_predict = []

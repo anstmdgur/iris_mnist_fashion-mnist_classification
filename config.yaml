@@ -1,8 +1,8 @@
-# iris_mlp(default):
+# 모델 이름 지정(default):
 #   model_parameters:
-#     model : "iris_MLP"
-#     dropout_p: 0.2
-#     bn: true
+#     model : "iris_MLP", "MNIST_MLP" , "CNN" 중 택1
+#     dropout_p: 0.2 (0.0 지정 시 dropout 설정 x)
+#     bn: true (미지정 시 batch nomalization 적용 x. false 자동 설정)
 #   train_parameters:
 #     lr: 0.01
 #     epochs: 50
@@ -11,6 +11,7 @@
 #   data_parameters:
 #     dataset: "iris"
 #     batch_size: 16
+#     augmentation: True (미지정 시 False. augmentation 적용 안함. 반드시 mnist에서만 사용할것.)
 
 iris_mlp:
   model_parameters:
@@ -24,6 +25,7 @@ iris_mlp:
     dataset: "iris"
     batch_size: 16
 
+
 mnist_mlp:
   model_parameters:
     model : "MNIST_MLP"
@@ -31,10 +33,11 @@ mnist_mlp:
     bn: true
   train_parameters:
     lr: 0.001
-    epochs: 20
+    epochs: 30
   data_parameters:
     dataset: "MNIST"
     batch_size: 32
+    augmentation: True
 
 mnist_cnn:
   model_parameters:
@@ -43,7 +46,7 @@ mnist_cnn:
     bn: true
   train_parameters:
     lr: 0.001
-    epochs: 20
+    epochs: 30
   data_parameters:
     dataset: "fashion-MNIST"
     batch_size: 32
