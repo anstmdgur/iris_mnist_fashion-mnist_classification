@@ -59,3 +59,50 @@ def plot_confusion_matrix(model,dataloader,device,classes,save_path = './as_lab_
     
     plt.tight_layout()
     plt.savefig(save_path)
+
+def plot_misclassified_images(model,dataloader,device,classes,num_images = 25,save_path = './as_lab_project_1/plot/misclassified_images.png'):
+    model.eval()
+
+    misclassified_images = []
+    misclassified_true = []
+    misclassified_predict = []
+
+    with torch.no_grad():
+        for image, label in dataloader:
+            image = image.to(device)
+            label = label.to(device)
+
+            output = model(image)
+            predict = torch.argmax(output, dim=1)
+            index = (predict != label).nonzero().squeeze()
+            #nonzero는 zero가 아닌 (False가 아닌. 여기서는 틀린 예측) 곳의 [틀린개수,차원 수] 형태 tensor반환
+            #3,5 인덱스가 틀렸다면 2행(2개 틀림) 1열(지금 다루는데이터가 1차원 데이터라서)의 tensor를 반환
+            #squeeze는 값이 1인 차원을 전부 제거함. 따라서 index에는 [3,5]처럼 틀린 인덱스만 남게됨.
+            #추가로 unsqueez는 인자로 주는 차원에 값이 1인 차원을 추가해줌 unsqueeze(-1) = [16,7,7] -> [16,7,7,1]
+            if index.ndim == 0: #batchsize중 하나만 틀렸을 경우(스칼라일 경우. 0차원일 경우)
+                index = index.view(1) #view를 통해 1차원 tensor로 변환함.
+            
+            for idx in index:
+                if len(misclassified_images) < num_images:
+                    misclassified_images.append(image[idx].cpu()) 
+                    misclassified_true.append(label[idx].cpu().item())
+                    misclassified_predict.append(predict[idx].cpu().item())
+                else:
+                    break
+            if len(misclassified_images) >= num_images:
+                break
+        if not misclassified_images:
+            print("틀린 이미지가 없습니다.")
+            return
+            
+        rows = cols = 5
+        plt.figure(figsize=(10, 10))
+        for i in range(len(misclassified_images)):
+            plt.subplot(rows, cols, i + 1)
+            img_tensor = misclassified_images[i].squeeze(0) #채*행*열 -> 행*열 로 변환
+            plt.imshow(img_tensor, cmap='gray')
+            true_name = classes[misclassified_true[i]]
+            predict_name = classes[misclassified_predict[i]]
+            plt.title(f"T: {true_name}\nP: {predict_name}")
+        plt.tight_layout()
+        plt.savefig(save_path)

@@ -25,8 +25,8 @@ iris_mlp:
     batch_size: 16
 
 mnist_mlp:
-  model : "MNIST_MLP"
   model_parameters:
+    model : "MNIST_MLP"
     dropout_p: 0.2
     bn: true
   train_parameters:
@@ -37,8 +37,8 @@ mnist_mlp:
     batch_size: 32
 
 mnist_cnn:
-  model : "CNN"
   model_parameters:
+    model : "CNN"
     dropout_p: 0.2
     bn: true
   train_parameters:

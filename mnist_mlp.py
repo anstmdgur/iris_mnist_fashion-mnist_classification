@@ -9,22 +9,15 @@ import random
 import os
 import numpy as np
 
-#실제 무작위성이 발생하는 시점은 함수를 call했을때 이므로, import후 해당 소스의 함수나 클래스를 사용하기 전에
-#seed를 고정해주면 그 이후 호출(call)된 함수나 클래스는 고정된 시드의 영향을 받음.
-def set_seed(seed):
-    random.seed(seed) #기본 파이썬 내장 random 시드 고정
-    os.environ['PYTHONHASHSEED'] = str(seed) #파이썬의 hash함수 동작을 위한 시드 고정
-    np.random.seed(seed) # numpy의 무작위성을 위한 seed 고정
-    torch.manual_seed(seed) #pytorch의 cpu 텐서 생성과 연산에 대한 시드 고정
-    torch.cuda.manual_seed(seed) #pytorch의 gpu(cuda) 텐서 생성과 연산에 대한 시드 고정
-    torch.backends.cudnn.deterministic = True # 딥러닝 연산 시 동일한 알고리즘 사용을 강제하여 결과를 같게 유도
-    torch.backends.cudnn.benchmark = False # 하드웨어 환경에 맞는 알고리즘을 찾는 벤치마크를 꺼서 결과를 같게 유도
 
-#cuDNN이란 : 딥러닝에서 자주 쓰이는 연산을 최적화 해둔 도구. relu, conv연산 등 함수를 모아둔 라이브러리 처럼 생김
-#같은 conv연산이라도, 데이터와 하드웨어어 따라 더 빠른 방법이 다르기때문에 벤치마킹 후 가장 빠른 알고리즘을 선택해
-#사용하는 기능도 있음. 이 기능을 꺼줘야 모든 데이터에 대해 같은 알고리즘을 사용해서 재현성이 올라감.
-#동일한 input과 output을 갖지만 이 기능을 꺼야 하는 이유는 float 자료형은 32비트를 사용해 아주 정확한 실수를 저장하지
-#못하기 때문에, 연산할때 연산 순서가 바뀐다면 값도 아주 미세하게 바뀔 가능성이 있기 때문임. 
+def set_seed(seed):
+    random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.backends.cudnn.deterministic = True 
+    torch.backends.cudnn.benchmark = False 
 
 set_seed(42)
 
@@ -33,7 +26,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 with open('./as_lab_project_1/config.yaml', 'r', encoding='utf-8') as f:
     config = yaml.load(f, Loader=yaml.FullLoader)
 
-config = config['iris_mlp']
+config = config['mnist_mlp']
 data_parameters = config['data_parameters']
 model_parameters = config['model_parameters']
 train_parameters = config['train_parameters']
