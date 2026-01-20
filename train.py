@@ -2,7 +2,6 @@ import torch
 from torch import nn,optim
 
 
-# device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 def select_optimizer(model,config): #config[train_parameters]
     learning_rate = config['lr']
@@ -12,8 +11,14 @@ def select_optimizer(model,config): #config[train_parameters]
     else:
         return optim.Adam(model.parameters(),lr=learning_rate)
 
+def select_scheduler(optimizer, config): #config[train_parameters]
+    scheduler = config.get('scheduler',False)
+    if scheduler:
+        return optim.lr_scheduler.StepLR(optimizer,step_size=10,gamma=0.1) #stepsize의 epoch마다 lr에 gamma를 곱해줌.
+    else:
+        return None
 
-def model_train(dataloader,model,optimizer,device,config): #config[train_parameters]
+def model_train(dataloader,model,optimizer,scheduler,device,config): #config[train_parameters]
 
     model.train()#dropout과 bn에 대해서 전부 활성화가 되도록 레이어 동작 방식을 설정함
 
@@ -54,7 +59,10 @@ def model_train(dataloader,model,optimizer,device,config): #config[train_paramet
         train_total += y_train.size(0) # 트레이닝 횟수 저장. batchsize를 계속해서 더해줌
         train_correct += ((torch.argmax(output,1)) == y_train).sum().item() #output이 정답과 일치하는 횟수를 전부 저장
 
-    
+    if scheduler is not None:
+        scheduler.step()
+        print("scaling Lr with Scheduler.")
+
     train_avg_loss = train_loss_sum / total_train_batch # 트레이닝 횟수 (전체데이터 / 배치사이즈)
     train_avg_accuracy = 100*train_correct / train_total # 51000회중 맞힌 횟수에 100을 곱해 %로 변환
 
@@ -98,10 +106,9 @@ def model_evaluate(dataloader,model,device,config):
     return val_avg_loss,val_avg_accuracy
 
 class EarlyStopping(): #함수가 아닌 class로 정의하는 이유는 이전 state를 기억하기 위함 (best_score, epoch)
-    def __init__(self,patience = 5, delta = 0.0, path = './as_lab_project_1/checkpoint/checkpoint.pt',verbose = True):
+    def __init__(self,patience = 5, delta = 0.0,verbose = True):
         self.patience = patience #성능이 향상되지 않아도 참을 횟수
         self.delta = delta #성능 향상을 인정할 최소 값
-        self.path = path #모델(체크포인트) 저장 경로
         self.verbose = verbose #관련 메시지 출력 여부
 
         self.count = 0 #patience 카운트
@@ -109,10 +116,11 @@ class EarlyStopping(): #함수가 아닌 class로 정의하는 이유는 이전 
         self.early_stop = False #early stop 신호 (True 시 종료)
         self.val_loss_min = float('inf') #비교를 위한 최저치 loss값 (초기 최저치는 무한으로 설정)
 
-    def save_checkpoint(self, val_loss, model): #체크포인트 저장 함수
+    def save_checkpoint(self, val_loss, model,config_name): #체크포인트 저장 함수
         if self.verbose :
             print(f"Validation loss decreased to {val_loss}. save model\n")
-            torch.save(model.state_dict(),self.path) #torch.save는 객체를 경로로 저장할 수 있음. 리스트, 딕셔너리, tensor모두 저장 가능
+            path = f'./as_lab_project_1/checkpoint/{config_name}_checkpoint.pt' #저장 경로 지정.
+            torch.save(model.state_dict(),path) #torch.save는 객체를 경로로 저장할 수 있음. 리스트, 딕셔너리, tensor모두 저장 가능
             #state_dict는 특정 층의 어떤 변수가 어떤 값을 갖고 있는지를 전부 저장함. 
             #sequential을 사용해 init했을 시 sequential이름.순서(0..),파라미터(weight, bais 등)으로 생성되며,
             #fc,relu등 변수를 하나하나 설정해 init했다면 변수이름(fc1).weight, fc1.bias 처럼 생성됨
@@ -122,12 +130,12 @@ class EarlyStopping(): #함수가 아닌 class로 정의하는 이유는 이전 
             #따라서 단순한 구조라면 sequential을 활용해서 구현하는 것이 가독성 측면에서 우위지만, 복잡한 구조에서는 forward를 하나하나 짜는게 좋음
             self.val_loss_min = val_loss
 
-    def __call__(self, val_loss, model):
+    def __call__(self, val_loss, model,config_name):
         score = -val_loss #loss가 낮을수록 좋으므로 음수로 바꿔서 점수로 환산
         
         if self.best_score is None: #초기 설정
             self.best_score = score
-            self.save_checkpoint(val_loss,model)
+            self.save_checkpoint(val_loss,model,config_name)
         elif score < self.best_score + self.delta: #성능향상 x
             self.count += 1
             if self.verbose:
@@ -136,5 +144,5 @@ class EarlyStopping(): #함수가 아닌 class로 정의하는 이유는 이전 
                 self.early_stop = True
         else: #성능향상 o
             self.best_score = score
-            self.save_checkpoint(val_loss,model)
+            self.save_checkpoint(val_loss,model,config_name)
             self.count = 0

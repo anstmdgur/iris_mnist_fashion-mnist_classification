@@ -9,9 +9,9 @@
 #     optim : "SGD" (optim 미지정 시 Adam자동 선택)
 #     loss_type : "MSE" (loss_type 미지정 시 CE 자동 선택)
 #   data_parameters:
-#     dataset: "iris"
+#     dataset: "iris" , "MNIST" , "fashion-MNIST" 중 택1
 #     batch_size: 16
-#     augmentation: True (미지정 시 False. augmentation 적용 안함. 반드시 mnist에서만 사용할것.)
+#     augmentation: True (augmentation 미지정 시 False. augmentation 적용 안함. 반드시 mnist류 데이터 에서만 사용할것.)
 
 iris_mlp:
   model_parameters:

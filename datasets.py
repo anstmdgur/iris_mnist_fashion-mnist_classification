@@ -76,9 +76,6 @@ def select_dataset(config): #config[data_parameters]
             x = torch.tensor(iris.data, dtype = torch.float32)
             y = torch.tensor(iris.target, dtype = torch.long)
 
-            # y = torch.nn.functional.one_hot(y, num_classes=3).float()
-
-
             mean = x.mean(dim=0) #평균
             std = x.std(dim=0) #표준편차
             x = (x-mean)/std #(원본 - 평균) / 표준편차 로 표준화
