@@ -56,7 +56,7 @@ for ep in range(1,EPOCH+1):
     history['train_acc'].append(train_avg_accuracy)
     history['val_acc'].append(val_avg_accuracy)
 
-    print(f"epoch = {ep} train loss = {train_avg_loss} trian acc = {train_avg_accuracy} val loss = {val_avg_loss} val acc = {val_avg_accuracy}\n")
+    print(f"epoch = {ep} train loss = {train_avg_loss} train acc = {train_avg_accuracy} val loss = {val_avg_loss} val acc = {val_avg_accuracy}\n")
 
     early_stop(val_avg_loss,my_model,config_name)
     if early_stop.early_stop:

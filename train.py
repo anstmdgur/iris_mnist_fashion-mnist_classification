@@ -61,7 +61,6 @@ def model_train(dataloader,model,optimizer,scheduler,device,config): #config[tra
 
     if scheduler is not None:
         scheduler.step()
-        print("scaling Lr with Scheduler.")
 
     train_avg_loss = train_loss_sum / total_train_batch # 트레이닝 횟수 (전체데이터 / 배치사이즈)
     train_avg_accuracy = 100*train_correct / train_total # 51000회중 맞힌 횟수에 100을 곱해 %로 변환
