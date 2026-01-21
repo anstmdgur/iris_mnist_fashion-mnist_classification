@@ -22,30 +22,25 @@ def model_train(dataloader,model,optimizer,scheduler,device,config): #config[tra
 
     model.train()#dropout과 bn에 대해서 전부 활성화가 되도록 레이어 동작 방식을 설정함
 
-    loss_type = config.get('loss_type','CE')
-
     train_loss_sum = train_correct = train_total = 0
     total_train_batch = len(dataloader)
 
-    if loss_type == "MSE":
-        loss_func = nn.MSELoss()
-    else:
-        loss_func = nn.CrossEntropyLoss()
+    one_hot = config.get('one_hot',False)
+    loss_func = nn.CrossEntropyLoss()
 
     for image,label in dataloader:
         x_train = image.to(device)
         y_train = label.to(device)
 
         output = model(x_train)
-        if loss_type == "MSE":
-            output = nn.functional.softmax(output,dim=1) #지정한 dimension의 값을 다 더했을 때 1이 되도록 softmax
+        if one_hot:
+            #nn.functional.softmax의 경우 지정한 dimension의 값을 다 더했을 때 1이 되도록 softmax
             #여기서는 output인 tensor[batchsize,3]중 3을 타겟해 softmax해야 하므로 dim = 1 로 지정
-            #마지막 차원을 dim = -1 로 지정할 수도 있음
+            #마지막 차원을 dim = -1 로 지정할 수도 있음. CE에 softmax가 들어있으므로 생략
             y_one_hot = nn.functional.one_hot(y_train,num_classes=output.size(1)).float()
             #one_hot은 숫자로 된 인덱스를 0과 1로 이루어진 벡터형으로 만들어줌
             #long타입의 tensor , 전체 클래스 개수를 인자로 넣어줘야 하며 num_classes = output의 1번차원 size를 지정
-            #.float()를 활용해 one_hot으로 생성한 벡터를 float형으로 바꿔줌. loss를 계산할 때 y-yhat을 수행해야 하기
-            #때문에 output과 동일한 float형으로 변환함.
+            #.float()를 활용해 one_hot으로 생성한 벡터를 float형으로 바꿔줌. output과 동일한 float형으로 변환함.
             loss = loss_func(output,y_one_hot)
         else:
             loss = loss_func(output,y_train)
@@ -72,24 +67,20 @@ def model_evaluate(dataloader,model,device,config):
     #각 평균과 분산을 가져와서 사용함. test,validation데이터에 대해 통계를 쓰지 않으며,
     #학습 시에 진행해둔 
 
-    loss_type = config.get('loss_type','CE')
+    one_hot = config.get('one_hot',False)
+    loss_func = nn.CrossEntropyLoss()
 
     with torch.no_grad(): #autograd에게 미분계산할 필요 없다고 알려줌. 각 tensor의 grad속성이 업데이트되지 않음.
 
         val_loss_sum = val_correct = val_total = 0
         total_val_batch = len(dataloader)
-        if loss_type == "MSE":
-            loss_func = nn.MSELoss()
-        else:
-            loss_func = nn.CrossEntropyLoss()
         
         for image,label in dataloader: 
             x_val = image.to(device)
             y_val = label.to(device)
 
             output = model(x_val)
-            if loss_type == "MSE":
-                output = nn.functional.softmax(output,dim=1) 
+            if one_hot:
                 y_one_hot = nn.functional.one_hot(y_val,num_classes=output.size(1)).float()
                 loss = loss_func(output,y_one_hot)
             else:

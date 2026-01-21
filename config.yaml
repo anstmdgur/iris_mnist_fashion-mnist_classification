@@ -7,21 +7,80 @@
 #     lr: 0.01
 #     epochs: 50
 #     optim : "SGD" (optim 미지정 시 Adam자동 선택)
-#     loss_type : "MSE" (loss_type 미지정 시 CE 자동 선택)
+#     one_hot : True (one_hot 미지정 시 False. 그냥 정답 인덱스 정수로 레이블 구성)
 #     scheduler: True (scheduler 미지정 시 False. 스케줄러 적용 안함.)
 #   data_parameters:
 #     dataset: "iris" , "MNIST" , "fashion-MNIST" 중 택1
 #     batch_size: 16
 #     augmentation: True (augmentation 미지정 시 False. augmentation 적용 안함. 반드시 mnist류 데이터 에서만 사용할것.)
 
-iris_mlp:
+iris_mlp_baseline:
   model_parameters:
     model : "iris_MLP"
-    dropout_p: 0.2
-    bn: true
+    dropout_p: 0.0
   train_parameters:
     lr: 0.01
     epochs: 50
+    optim: 'SGD'
+  data_parameters:
+    dataset: "iris"
+    batch_size: 16
+
+iris_mlp_adam:
+  model_parameters:
+    model : "iris_MLP"
+    dropout_p: 0.0
+  train_parameters:
+    lr: 0.01
+    epochs: 50
+  data_parameters:
+    dataset: "iris"
+    batch_size: 16
+
+iris_mlp_low_batch:
+  model_parameters:
+    model : "iris_MLP"
+    dropout_p: 0.0
+  train_parameters:
+    lr: 0.01
+    epochs: 50
+    optim: 'SGD'
+  data_parameters:
+    dataset: "iris"
+    batch_size: 4
+
+iris_mlp_high_batch:
+  model_parameters:
+    model : "iris_MLP"
+    dropout_p: 0.0
+  train_parameters:
+    lr: 0.01
+    epochs: 50
+    optim: 'SGD'
+  data_parameters:
+    dataset: "iris"
+    batch_size: 64
+
+iris_mlp_low_lr:
+  model_parameters:
+    model : "iris_MLP"
+    dropout_p: 0.0
+  train_parameters:
+    lr: 0.001
+    epochs: 50
+    optim: 'SGD'
+  data_parameters:
+    dataset: "iris"
+    batch_size: 16
+
+iris_mlp_high_lr:
+  model_parameters:
+    model : "iris_MLP"
+    dropout_p: 0.0
+  train_parameters:
+    lr: 0.1
+    epochs: 50
+    optim: 'SGD'
   data_parameters:
     dataset: "iris"
     batch_size: 16
