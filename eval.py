@@ -53,14 +53,16 @@ def plot_confusion_matrix_and_report(model,dataloader,device,classes,config_name
             all_predictions.extend(prediction.cpu().numpy()) #confusion_matrix함수는 tensor가 아닌 numpy형태의 데이터가 필요함
             all_labels.extend(label.cpu().numpy()) #추가로 cpu로 가져오지 못하면 numpy로 변환이 불가능하기 때문에 cpu로 이동시킴
     
-    print(classification_report(all_labels,all_predictions,target_names=classes,digits=4)) #precision, recall, f1 score 출력을 위한 함수
+    report = (classification_report(all_labels,all_predictions,target_names=classes,digits=4)) #precision, recall, f1 score 출력을 위한 함수
     #precision정밀도 = TP/TP+FP = FP(X가 아닌데 X라고 예측)이 높을수록 precision이 낮아진다. precision이 낮다면 헷갈릴때 그냥 X라고 예측하는 경우가 많음
         #precision이 높다면 모델이 x에 대해서 확실할때만 정답이라고 하는 경향이 있음
     #recall재현율 = TP/TP+FN = FN(X인데 X아니라고 예측)이 높을수록 recall이 낮아진다. recall이 낮다면 x를 잘 구분못하고 다른거라고 예측하는 경우임
         #recall이 높다면 모델이 x를 하나도 안놓치고 싹 다 찾아낸거임.
     #f1 score = precision과 recall의 조화평균. 둘 중 하나라도 값이 낮다면 f1 score가 확 깎인다. 데이터 클래스의 빈도 불균형이 심할때 훨씬 신뢰할 수 있는 지표.
     #support = 데이터에 들어있는 각 x당 실제 정답 개수.
-
+    print(report)
+    with open(f"./as_lab_project_1/log/{config_name}_result.txt", "a", encoding="utf-8") as f:
+        f.write(report)
     cm = confusion_matrix(all_labels,all_predictions) #extend로 길어진 정답리스트,예측리스트를 인자로 받음
     # 같은 인덱스끼리 비교하면서 정답:9, 예측 7이라면 9행 7열의 숫자를 +1함. 결국 10*10 크기의 행렬로 만들어짐
 

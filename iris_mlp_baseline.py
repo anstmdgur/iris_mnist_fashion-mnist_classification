@@ -57,8 +57,8 @@ def main(config_name):
         history['val_loss'].append(val_avg_loss)
         history['train_acc'].append(train_avg_accuracy)
         history['val_acc'].append(val_avg_accuracy)
-
-        print(f"epoch = {ep} train loss = {train_avg_loss} train acc = {train_avg_accuracy} val loss = {val_avg_loss} val acc = {val_avg_accuracy}\n")
+        if ep % 5 == 0:
+            print(f"epoch = {ep} train loss = {train_avg_loss} train acc = {train_avg_accuracy} val loss = {val_avg_loss} val acc = {val_avg_accuracy}\n")
 
         early_stop(val_avg_loss,my_model,config_name)
         if early_stop.early_stop:
@@ -83,10 +83,11 @@ def main(config_name):
     val_loss, val_acc = train.model_evaluate(validation_data_loader,my_model,device,train_parameters)
     test_loss, test_acc = train.model_evaluate(test_data_loader,my_model,device,train_parameters)
     
-    print(f"{config_name} model\n")
-    print(f"Train : Acc {train_acc:.2f}% | Loss {train_loss:.4f}")
-    print(f"Val   : Acc {val_acc:.2f}% | Loss {val_loss:.4f}")
-    print(f"Test  : Acc {test_acc:.2f}% | Loss {test_loss:.4f}\n")
+    with open(f"./as_lab_project_1/log/{config_name}_result.txt",'w',encoding='utf-8') as f:
+        f.write(f"{config_name} model\n")
+        f.write(f"Train : Acc {train_acc:.2f}% | Loss {train_loss:.4f}\n")
+        f.write(f"Val   : Acc {val_acc:.2f}% | Loss {val_loss:.4f}\n")
+        f.write(f"Test  : Acc {test_acc:.2f}% | Loss {test_loss:.4f}\n")
 
     eval.plot_history(history,config_name)
     eval.plot_confusion_matrix_and_report(my_model,test_data_loader,device,classes,config_name)
@@ -98,3 +99,4 @@ main("iris_mlp_low_batch")
 main("iris_mlp_high_batch")
 main("iris_mlp_low_lr")
 main("iris_mlp_high_lr")
+#patience 20으로 수정 후 돌릴것!

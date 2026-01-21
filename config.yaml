@@ -20,7 +20,7 @@ iris_mlp_baseline:
     dropout_p: 0.0
   train_parameters:
     lr: 0.01
-    epochs: 50
+    epochs: 200
     optim: 'SGD'
   data_parameters:
     dataset: "iris"
@@ -32,7 +32,7 @@ iris_mlp_adam:
     dropout_p: 0.0
   train_parameters:
     lr: 0.01
-    epochs: 50
+    epochs: 200
   data_parameters:
     dataset: "iris"
     batch_size: 16
@@ -43,7 +43,7 @@ iris_mlp_low_batch:
     dropout_p: 0.0
   train_parameters:
     lr: 0.01
-    epochs: 50
+    epochs: 200
     optim: 'SGD'
   data_parameters:
     dataset: "iris"
@@ -55,7 +55,7 @@ iris_mlp_high_batch:
     dropout_p: 0.0
   train_parameters:
     lr: 0.01
-    epochs: 50
+    epochs: 200
     optim: 'SGD'
   data_parameters:
     dataset: "iris"
@@ -67,7 +67,7 @@ iris_mlp_low_lr:
     dropout_p: 0.0
   train_parameters:
     lr: 0.001
-    epochs: 50
+    epochs: 200
     optim: 'SGD'
   data_parameters:
     dataset: "iris"
@@ -79,35 +79,54 @@ iris_mlp_high_lr:
     dropout_p: 0.0
   train_parameters:
     lr: 0.1
-    epochs: 50
+    epochs: 200
     optim: 'SGD'
   data_parameters:
     dataset: "iris"
     batch_size: 16
 
-
-mnist_mlp:
+mnist_mlp_baseline:
   model_parameters:
     model : "MNIST_MLP"
-    dropout_p: 0.2
-    bn: true
+    dropout_p: 0.0
   train_parameters:
     lr: 0.001
-    epochs: 30
-    scheduler: True
+    epochs: 50
   data_parameters:
     dataset: "MNIST"
-    batch_size: 32
-    augmentation: True
+    batch_size: 64
+
+mnist_mlp_one_hot:
+  model_parameters:
+    model : "MNIST_MLP"
+    dropout_p: 0.0
+  train_parameters:
+    lr: 0.001
+    epochs: 50
+    one_hot: True
+  data_parameters:
+    dataset: "MNIST"
+    batch_size: 64
 
 mnist_cnn:
   model_parameters:
     model : "CNN"
-    dropout_p: 0.2
-    bn: true
+    dropout_p: 0.0
   train_parameters:
     lr: 0.001
-    epochs: 30
+    epochs: 50
   data_parameters:
-    dataset: "fashion-MNIST"
-    batch_size: 32
+    dataset: "MNIST"
+    batch_size: 64
+
+mnist_cnn_depth_2:
+  model_parameters:
+    model : "CNN"
+    dropout_p: 0.0
+    depth: 2
+  train_parameters:
+    lr: 0.001
+    epochs: 50
+  data_parameters:
+    dataset: "MNIST"
+    batch_size: 64
