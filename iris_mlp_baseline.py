@@ -37,7 +37,7 @@ def main(config_name):
     my_model = model.select_model(model_parameters,device)
     optimizer = train.select_optimizer(my_model,train_parameters)
     scheduler = train.select_scheduler(optimizer,train_parameters)
-    early_stop = train.EarlyStopping()
+    early_stop = train.EarlyStopping(patience=20) #iris patience
     EPOCH = train_parameters['epochs']
 
     history = {'train_loss': [], 'val_loss': [], 'train_acc': [], 'val_acc': []}
@@ -60,7 +60,7 @@ def main(config_name):
         if ep % 5 == 0:
             print(f"epoch = {ep} train loss = {train_avg_loss} train acc = {train_avg_accuracy} val loss = {val_avg_loss} val acc = {val_avg_accuracy}\n")
 
-        early_stop(val_avg_loss,my_model,config_name)
+        early_stop(val_avg_loss,my_model,config_name,dataset)
         if early_stop.early_stop:
             print("Early stop. Training Finish.")
             break
@@ -78,20 +78,22 @@ def main(config_name):
         case 'fashion-MNIST':
             classes = ['T-shirt', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Boot']
 
-    my_model.load_state_dict(torch.load(f"./as_lab_project_1/checkpoint/{config_name}_checkpoint.pt"))
+    my_model.load_state_dict(torch.load(f"./as_lab_project_1/checkpoint/{dataset}/{config_name}_checkpoint.pt"))
     train_loss, train_acc = train.model_evaluate(train_data_loader,my_model,device,train_parameters)
     val_loss, val_acc = train.model_evaluate(validation_data_loader,my_model,device,train_parameters)
     test_loss, test_acc = train.model_evaluate(test_data_loader,my_model,device,train_parameters)
     
-    with open(f"./as_lab_project_1/log/{config_name}_result.txt",'w',encoding='utf-8') as f:
+    with open(f"./as_lab_project_1/log/{dataset}/{config_name}_result.txt",'w',encoding='utf-8') as f:
         f.write(f"{config_name} model\n")
         f.write(f"Train : Acc {train_acc:.2f}% | Loss {train_loss:.4f}\n")
         f.write(f"Val   : Acc {val_acc:.2f}% | Loss {val_loss:.4f}\n")
         f.write(f"Test  : Acc {test_acc:.2f}% | Loss {test_loss:.4f}\n")
+        f.write(f"total time = {total_time}sec.   avg time per epoch = {avg_time_per_epoch}sec.\n\n")
 
-    eval.plot_history(history,config_name)
-    eval.plot_confusion_matrix_and_report(my_model,test_data_loader,device,classes,config_name)
+    eval.plot_history(history,config_name,dataset)
+    eval.plot_confusion_matrix_and_report(my_model,test_data_loader,device,classes,config_name,dataset)
     print(f"{config_name} training end.\n")
+
 
 main("iris_mlp_baseline")
 main("iris_mlp_adam")
@@ -99,4 +101,4 @@ main("iris_mlp_low_batch")
 main("iris_mlp_high_batch")
 main("iris_mlp_low_lr")
 main("iris_mlp_high_lr")
-#patience 20으로 수정 후 돌릴것!
+#patience 20으로 수정

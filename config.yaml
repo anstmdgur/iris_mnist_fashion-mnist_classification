@@ -130,3 +130,81 @@ mnist_cnn_depth_2:
   data_parameters:
     dataset: "MNIST"
     batch_size: 64
+
+fashion-mnist_cnn_baseline:
+  model_parameters:
+    model : "CNN"
+    dropout_p: 0.0
+    depth: 2
+  train_parameters:
+    lr: 0.001
+    epochs: 50
+  data_parameters:
+    dataset: "fashion-MNIST"
+    batch_size: 64
+
+fashion-mnist_cnn_dropout:
+  model_parameters:
+    model : "CNN"
+    dropout_p: 0.3
+    depth: 2
+  train_parameters:
+    lr: 0.001
+    epochs: 50
+  data_parameters:
+    dataset: "fashion-MNIST"
+    batch_size: 64
+
+fashion-mnist_cnn_bn:
+  model_parameters:
+    model : "CNN"
+    dropout_p: 0.0
+    bn: True
+    depth: 2
+  train_parameters:
+    lr: 0.001
+    epochs: 50
+  data_parameters:
+    dataset: "fashion-MNIST"
+    batch_size: 64
+
+fashion-mnist_cnn_scheduler:
+  model_parameters:
+    model : "CNN"
+    dropout_p: 0.0
+    depth: 2
+  train_parameters:
+    lr: 0.001
+    epochs: 50
+    scheduler: True
+  data_parameters:
+    dataset: "fashion-MNIST"
+    batch_size: 64
+
+fashion-mnist_cnn_aug:
+  model_parameters:
+    model : "CNN"
+    dropout_p: 0.0
+    depth: 2
+  train_parameters:
+    lr: 0.001
+    epochs: 50
+  data_parameters:
+    dataset: "fashion-MNIST"
+    batch_size: 64
+    augmentation: True
+
+fashion-mnist_cnn_improved:
+  model_parameters:
+    model : "CNN"
+    dropout_p: 0.3
+    bn: True
+    depth: 2
+  train_parameters:
+    lr: 0.001
+    epochs: 50
+    scheduler: True
+  data_parameters:
+    dataset: "fashion-MNIST"
+    batch_size: 64
+    augmentation: True

@@ -106,10 +106,10 @@ class EarlyStopping(): #함수가 아닌 class로 정의하는 이유는 이전 
         self.early_stop = False #early stop 신호 (True 시 종료)
         self.val_loss_min = float('inf') #비교를 위한 최저치 loss값 (초기 최저치는 무한으로 설정)
 
-    def save_checkpoint(self, val_loss, model,config_name): #체크포인트 저장 함수
+    def save_checkpoint(self, val_loss, model,config_name,dataset): #체크포인트 저장 함수
         if self.verbose :
             print(f"Validation loss decreased to {val_loss}. save model\n")
-            path = f'./as_lab_project_1/checkpoint/{config_name}_checkpoint.pt' #저장 경로 지정.
+            path = f'./as_lab_project_1/checkpoint/{dataset}/{config_name}_checkpoint.pt' #저장 경로 지정.
             torch.save(model.state_dict(),path) #torch.save는 객체를 경로로 저장할 수 있음. 리스트, 딕셔너리, tensor모두 저장 가능
             #state_dict는 특정 층의 어떤 변수가 어떤 값을 갖고 있는지를 전부 저장함. 
             #sequential을 사용해 init했을 시 sequential이름.순서(0..),파라미터(weight, bais 등)으로 생성되며,
@@ -120,12 +120,12 @@ class EarlyStopping(): #함수가 아닌 class로 정의하는 이유는 이전 
             #따라서 단순한 구조라면 sequential을 활용해서 구현하는 것이 가독성 측면에서 우위지만, 복잡한 구조에서는 forward를 하나하나 짜는게 좋음
             self.val_loss_min = val_loss
 
-    def __call__(self, val_loss, model,config_name):
+    def __call__(self, val_loss, model,config_name,dataset):
         score = -val_loss #loss가 낮을수록 좋으므로 음수로 바꿔서 점수로 환산
         
         if self.best_score is None: #초기 설정
             self.best_score = score
-            self.save_checkpoint(val_loss,model,config_name)
+            self.save_checkpoint(val_loss,model,config_name,dataset)
         elif score < self.best_score + self.delta: #성능향상 x
             self.count += 1
             if self.verbose:
@@ -134,5 +134,5 @@ class EarlyStopping(): #함수가 아닌 class로 정의하는 이유는 이전 
                 self.early_stop = True
         else: #성능향상 o
             self.best_score = score
-            self.save_checkpoint(val_loss,model,config_name)
+            self.save_checkpoint(val_loss,model,config_name,dataset)
             self.count = 0

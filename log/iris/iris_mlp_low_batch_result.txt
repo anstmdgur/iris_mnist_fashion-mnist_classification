@@ -1,0 +1,13 @@
+iris_mlp_low_batch model
+Train : Acc 99.05% | Loss 0.0364
+Val   : Acc 95.45% | Loss 0.0759
+Test  : Acc 91.30% | Loss 0.1995
+              precision    recall  f1-score   support
+
+      Setosa     1.0000    1.0000    1.0000         6
+  Versicolor     1.0000    0.6667    0.8000         6
+   Virginica     0.8462    1.0000    0.9167        11
+
+    accuracy                         0.9130        23
+   macro avg     0.9487    0.8889    0.9056        23
+weighted avg     0.9264    0.9130    0.9080        23
