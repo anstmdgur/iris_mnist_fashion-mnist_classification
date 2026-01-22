@@ -31,9 +31,9 @@ def select_dataset(config): #config[data_parameters]
                 #deepcopy 시에 내부 데이터까지 동일한 완전히 새로운 객체가 생성되므로, 이때 transform 속성을 바꾸면
                 #validation 데이터까지 영향을 미치는 것을 막을 수 있다.
                 train.dataset.transform = transforms.Compose([
-                    transforms.RandomCrop(28, padding=4), #padding을 4로 해서 36*36크기로 키운 다음,
+                    transforms.RandomCrop(28, padding=2), #padding을 4로 해서 36*36크기로 키운 다음,
                     #키운 이미지를 랜덤하게 28*28크기로 크롭함. 이과정에서 이미지가 한쪽으로 쏠리는 듯이 변형됨.
-                    transforms.RandomRotation(degrees=15),#-15~15도 랜덤하게 기울어짐
+                    transforms.RandomRotation(degrees=10),#-15~15도 랜덤하게 기울어짐
                     transforms.ToTensor(),
                     transforms.Normalize([mean],[std])
                 ]) 
@@ -59,8 +59,8 @@ def select_dataset(config): #config[data_parameters]
             if augmentation: #데이터 augmentation 할때 사용됨.
                 train = copy.deepcopy(train)
                 train.dataset.transform = transforms.Compose([
-                    transforms.RandomCrop(28, padding=4),
-                    transforms.RandomRotation(degrees=15),
+                    transforms.RandomCrop(28, padding=2),
+                    transforms.RandomRotation(degrees=10),
                     transforms.ToTensor(),
                     transforms.Normalize([mean],[std])
                 ])

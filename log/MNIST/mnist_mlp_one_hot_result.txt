@@ -1,7 +1,11 @@
 mnist_mlp_one_hot model
+
 Train : Acc 99.20% | Loss 0.0249
 Val   : Acc 97.58% | Loss 0.0813
 Test  : Acc 97.76% | Loss 0.0750
+
+total time = 71.75021195411682sec.   avg time per epoch = 7.1750211954116825sec.
+
               precision    recall  f1-score   support
 
            0     0.9681    0.9898    0.9788       980

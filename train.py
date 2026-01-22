@@ -12,9 +12,10 @@ def select_optimizer(model,config): #config[train_parameters]
         return optim.Adam(model.parameters(),lr=learning_rate)
 
 def select_scheduler(optimizer, config): #config[train_parameters]
-    scheduler = config.get('scheduler',False)
-    if scheduler:
-        return optim.lr_scheduler.StepLR(optimizer,step_size=10,gamma=0.1) #stepsize의 epoch마다 lr에 gamma를 곱해줌.
+    scheduler_step_size = config.get('scheduler_step_size',False)
+    if scheduler_step_size: #fashion-mnist에게 step size는 사실상 어느정도 수렴하기까지 기다려줄 에폭 횟수임
+        return optim.lr_scheduler.StepLR(optimizer,step_size=scheduler_step_size,gamma=0.1) #stepsize의 epoch마다 lr에 gamma를 곱해줌.
+        #gamma가 0.1 이기때문에 
     else:
         return None
 
@@ -96,7 +97,7 @@ def model_evaluate(dataloader,model,device,config):
     return val_avg_loss,val_avg_accuracy
 
 class EarlyStopping(): #함수가 아닌 class로 정의하는 이유는 이전 state를 기억하기 위함 (best_score, epoch)
-    def __init__(self,patience = 5, delta = 0.0,verbose = True):
+    def __init__(self,patience = 10, delta = 0.0,verbose = True):
         self.patience = patience #성능이 향상되지 않아도 참을 횟수
         self.delta = delta #성능 향상을 인정할 최소 값
         self.verbose = verbose #관련 메시지 출력 여부

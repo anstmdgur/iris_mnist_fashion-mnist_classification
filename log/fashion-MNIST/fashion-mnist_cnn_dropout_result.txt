@@ -1,24 +1,24 @@
 fashion-mnist_cnn_dropout model
 
-Train : Acc 95.95% | Loss 0.1145
-Val   : Acc 92.59% | Loss 0.2100
-Test  : Acc 92.13% | Loss 0.2213
+Train : Acc 95.16% | Loss 0.1362
+Val   : Acc 92.19% | Loss 0.2171
+Test  : Acc 91.67% | Loss 0.2354
 
-total time = 173.40633058547974sec.   avg time per epoch = 9.633685032526651sec.
+total time = 193.70576906204224sec.   avg time per epoch = 9.685288453102112sec.
 
               precision    recall  f1-score   support
 
-     T-shirt     0.8736    0.8780    0.8758      1000
-     Trouser     0.9939    0.9850    0.9895      1000
-    Pullover     0.8558    0.9020    0.8783      1000
-       Dress     0.9091    0.9300    0.9194      1000
-        Coat     0.8743    0.8760    0.8751      1000
-      Sandal     0.9870    0.9860    0.9865      1000
-       Shirt     0.7877    0.7310    0.7583      1000
-     Sneaker     0.9561    0.9790    0.9674      1000
-         Bag     0.9899    0.9840    0.9870      1000
-        Boot     0.9816    0.9620    0.9717      1000
+     T-shirt     0.8534    0.8910    0.8718      1000
+     Trouser     0.9980    0.9760    0.9869      1000
+    Pullover     0.8602    0.8800    0.8700      1000
+       Dress     0.9069    0.9350    0.9207      1000
+        Coat     0.8529    0.8810    0.8667      1000
+      Sandal     0.9878    0.9720    0.9798      1000
+       Shirt     0.7905    0.7130    0.7497      1000
+     Sneaker     0.9442    0.9810    0.9622      1000
+         Bag     0.9919    0.9740    0.9828      1000
+        Boot     0.9797    0.9640    0.9718      1000
 
-    accuracy                         0.9213     10000
-   macro avg     0.9209    0.9213    0.9209     10000
-weighted avg     0.9209    0.9213    0.9209     10000
+    accuracy                         0.9167     10000
+   macro avg     0.9165    0.9167    0.9163     10000
+weighted avg     0.9165    0.9167    0.9163     10000

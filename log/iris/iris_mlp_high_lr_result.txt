@@ -2,6 +2,8 @@ iris_mlp_high_lr model
 Train : Acc 100.00% | Loss 0.0292
 Val   : Acc 95.45% | Loss 0.1259
 Test  : Acc 91.30% | Loss 0.2193
+total time = 1.1282622814178467sec.   avg time per epoch = 0.009810976360155188sec.
+
               precision    recall  f1-score   support
 
       Setosa     1.0000    1.0000    1.0000         6

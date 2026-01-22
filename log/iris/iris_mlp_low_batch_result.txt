@@ -2,6 +2,8 @@ iris_mlp_low_batch model
 Train : Acc 99.05% | Loss 0.0364
 Val   : Acc 95.45% | Loss 0.0759
 Test  : Acc 91.30% | Loss 0.1995
+total time = 5.627716302871704sec.   avg time per epoch = 0.02813858151435852sec.
+
               precision    recall  f1-score   support
 
       Setosa     1.0000    1.0000    1.0000         6

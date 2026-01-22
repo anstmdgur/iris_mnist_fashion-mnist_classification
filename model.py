@@ -42,7 +42,7 @@ class CnnModel(nn.Module):
             layer_list.append(nn.BatchNorm2d(32))
         layer_list.append(nn.ReLU())
         layer_list.append(nn.MaxPool2d(kernel_size= 2, stride= 2))
-        layer_list.append(nn.Dropout(dropout_p))
+        # layer_list.append(nn.Dropout(dropout_p))
 
         current_image_size = 14
         current_channels = 32
@@ -53,7 +53,7 @@ class CnnModel(nn.Module):
                 layer_list.append(nn.BatchNorm2d(64))
             layer_list.append(nn.ReLU())
             layer_list.append(nn.MaxPool2d(kernel_size= 2, stride= 2))
-            layer_list.append(nn.Dropout(dropout_p))
+            # layer_list.append(nn.Dropout(dropout_p))
             current_image_size = 7
             current_channels = 64
 

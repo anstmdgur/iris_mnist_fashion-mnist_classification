@@ -84,10 +84,10 @@ def main(config_name):
     test_loss, test_acc = train.model_evaluate(test_data_loader,my_model,device,train_parameters)
     
     with open(f"./as_lab_project_1/log/{dataset}/{config_name}_result.txt",'w',encoding='utf-8') as f:
-        f.write(f"{config_name} model\n")
+        f.write(f"{config_name} model\n\n")
         f.write(f"Train : Acc {train_acc:.2f}% | Loss {train_loss:.4f}\n")
         f.write(f"Val   : Acc {val_acc:.2f}% | Loss {val_loss:.4f}\n")
-        f.write(f"Test  : Acc {test_acc:.2f}% | Loss {test_loss:.4f}\n")
+        f.write(f"Test  : Acc {test_acc:.2f}% | Loss {test_loss:.4f}\n\n")
         f.write(f"total time = {total_time}sec.   avg time per epoch = {avg_time_per_epoch}sec.\n\n")
 
     eval.plot_history(history,config_name,dataset)

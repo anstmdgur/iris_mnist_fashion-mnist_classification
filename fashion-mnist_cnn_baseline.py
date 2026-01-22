@@ -20,7 +20,7 @@ def set_seed(seed):
     torch.backends.cudnn.deterministic = True 
     torch.backends.cudnn.benchmark = False 
 
-def main(config_name):
+def main(config_name,patience = 15):
     set_seed(42)
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -37,7 +37,7 @@ def main(config_name):
     my_model = model.select_model(model_parameters,device)
     optimizer = train.select_optimizer(my_model,train_parameters)
     scheduler = train.select_scheduler(optimizer,train_parameters)
-    early_stop = train.EarlyStopping()
+    early_stop = train.EarlyStopping(patience=patience)
     EPOCH = train_parameters['epochs']
 
     history = {'train_loss': [], 'val_loss': [], 'train_acc': [], 'val_acc': []}
@@ -98,8 +98,8 @@ def main(config_name):
 main("fashion-mnist_cnn_baseline")
 main("fashion-mnist_cnn_dropout")
 main("fashion-mnist_cnn_bn")
-main("fashion-mnist_cnn_scheduler")
+main("fashion-mnist_cnn_scheduler") #stepsize줄여야함. config에서 stepsize 5로 지정
 main("fashion-mnist_cnn_aug")
-main("fashion-mnist_cnn_improved")
+main("fashion-mnist_cnn_improved",patience=20)
 
 #반드시 patience 확인 후 돌릴것!

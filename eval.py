@@ -113,7 +113,7 @@ def plot_misclassified_images(model,dataloader,device,classes,config_name,datase
             return
             
         rows = cols = 5
-        plt.figure(figsize=(10, 10),dpi= 300)
+        plt.figure(figsize=(10, 10),dpi= 200)
         for i in range(len(misclassified_images)):
             plt.subplot(rows, cols, i + 1)
             img_tensor = misclassified_images[i].squeeze(0) #채*행*열 -> 행*열 로 변환
