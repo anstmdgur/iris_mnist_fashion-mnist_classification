@@ -95,11 +95,11 @@ def main(config_name,patience = 15):
     eval.plot_misclassified_images(my_model,test_data_loader,device,classes,config_name,dataset)
     print(f"{config_name} training end.\n")
 
-main("fashion-mnist_cnn_baseline")
-main("fashion-mnist_cnn_dropout")
-main("fashion-mnist_cnn_bn")
+# main("fashion-mnist_cnn_baseline")
+# main("fashion-mnist_cnn_dropout")
+# main("fashion-mnist_cnn_bn")
 main("fashion-mnist_cnn_scheduler") #stepsize줄여야함. config에서 stepsize 5로 지정
-main("fashion-mnist_cnn_aug")
-main("fashion-mnist_cnn_improved",patience=20)
+# main("fashion-mnist_cnn_aug")
+# main("fashion-mnist_cnn_improved",patience=20)
 
 #반드시 patience 확인 후 돌릴것!
