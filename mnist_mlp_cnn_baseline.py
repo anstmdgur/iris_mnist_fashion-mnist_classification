@@ -95,8 +95,9 @@ def main(config_name):
     eval.plot_misclassified_images(my_model,test_data_loader,device,classes,config_name,dataset)
     print(f"{config_name} training end.\n")
 
-main("mnist_mlp_baseline")
-main("mnist_mlp_one_hot")
-main("mnist_cnn")
-main("mnist_cnn_depth_2")
+# main("mnist_mlp_baseline")
+# main("mnist_mlp_one_hot")
+main("mnist_mlp_no_standardization")
+# main("mnist_cnn")
+# main("mnist_cnn_depth_2")
 #반드시 patience 확인 후 돌릴것!

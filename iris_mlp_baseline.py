@@ -37,7 +37,7 @@ def main(config_name):
     my_model = model.select_model(model_parameters,device)
     optimizer = train.select_optimizer(my_model,train_parameters)
     scheduler = train.select_scheduler(optimizer,train_parameters)
-    early_stop = train.EarlyStopping(patience=20) #iris patience
+    early_stop = train.EarlyStopping() #iris patience
     EPOCH = train_parameters['epochs']
 
     history = {'train_loss': [], 'val_loss': [], 'train_acc': [], 'val_acc': []}
@@ -101,4 +101,4 @@ main("iris_mlp_low_batch")
 main("iris_mlp_high_batch")
 main("iris_mlp_low_lr")
 main("iris_mlp_high_lr")
-#patience 20으로 수정
+main("iris_mlp_no_standardization")

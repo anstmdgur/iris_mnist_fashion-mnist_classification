@@ -8,7 +8,7 @@
 #     epochs: 50
 #     optim : "SGD" (optim 미지정 시 Adam자동 선택)
 #     one_hot : True (one_hot 미지정 시 False. 그냥 정답 인덱스 정수로 레이블 구성)
-#     scheduler: True (scheduler 미지정 시 False. 스케줄러 적용 안함.)
+#     scheduler_step_size: 20 (scheduler 미지정 시 False. 스케줄러 적용 안함.)
 #   data_parameters:
 #     dataset: "iris" , "MNIST" , "fashion-MNIST" 중 택1
 #     batch_size: 16
@@ -24,7 +24,20 @@ iris_mlp_baseline:
     optim: 'SGD'
   data_parameters:
     dataset: "iris"
-    batch_size: 16
+    batch_size: 8
+
+iris_mlp_no_standardization:
+  model_parameters:
+    model : "iris_MLP"
+    dropout_p: 0.0
+  train_parameters:
+    lr: 0.01
+    epochs: 200
+    optim: 'SGD'
+  data_parameters:
+    dataset: "iris"
+    batch_size: 8
+    no_standardization: True
 
 iris_mlp_adam:
   model_parameters:
@@ -35,7 +48,7 @@ iris_mlp_adam:
     epochs: 200
   data_parameters:
     dataset: "iris"
-    batch_size: 16
+    batch_size: 8
 
 iris_mlp_low_batch:
   model_parameters:
@@ -47,7 +60,7 @@ iris_mlp_low_batch:
     optim: 'SGD'
   data_parameters:
     dataset: "iris"
-    batch_size: 4
+    batch_size: 2
 
 iris_mlp_high_batch:
   model_parameters:
@@ -59,7 +72,7 @@ iris_mlp_high_batch:
     optim: 'SGD'
   data_parameters:
     dataset: "iris"
-    batch_size: 64
+    batch_size: 32
 
 iris_mlp_low_lr:
   model_parameters:
@@ -71,7 +84,7 @@ iris_mlp_low_lr:
     optim: 'SGD'
   data_parameters:
     dataset: "iris"
-    batch_size: 16
+    batch_size: 8
 
 iris_mlp_high_lr:
   model_parameters:
@@ -83,7 +96,12 @@ iris_mlp_high_lr:
     optim: 'SGD'
   data_parameters:
     dataset: "iris"
-    batch_size: 16
+    batch_size: 8
+
+
+
+
+
 
 mnist_mlp_baseline:
   model_parameters:
@@ -108,6 +126,18 @@ mnist_mlp_one_hot:
     dataset: "MNIST"
     batch_size: 64
 
+mnist_mlp_no_standardization:
+  model_parameters:
+    model : "MNIST_MLP"
+    dropout_p: 0.0
+  train_parameters:
+    lr: 0.001
+    epochs: 50
+  data_parameters:
+    dataset: "MNIST"
+    batch_size: 64
+    no_standardization: True
+
 mnist_cnn:
   model_parameters:
     model : "CNN"
@@ -130,6 +160,11 @@ mnist_cnn_depth_2:
   data_parameters:
     dataset: "MNIST"
     batch_size: 64
+
+
+
+
+
 
 fashion-mnist_cnn_baseline:
   model_parameters:

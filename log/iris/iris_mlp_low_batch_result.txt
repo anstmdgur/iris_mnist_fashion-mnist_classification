@@ -1,15 +1,17 @@
 iris_mlp_low_batch model
-Train : Acc 99.05% | Loss 0.0364
-Val   : Acc 95.45% | Loss 0.0759
-Test  : Acc 91.30% | Loss 0.1995
-total time = 5.627716302871704sec.   avg time per epoch = 0.02813858151435852sec.
+
+Train : Acc 100.00% | Loss 0.0309
+Val   : Acc 96.67% | Loss 0.0463
+Test  : Acc 93.33% | Loss 0.1671
+
+total time = 8.09528398513794sec.   avg time per epoch = 0.05156231837667477sec.
 
               precision    recall  f1-score   support
 
       Setosa     1.0000    1.0000    1.0000         6
-  Versicolor     1.0000    0.6667    0.8000         6
-   Virginica     0.8462    1.0000    0.9167        11
+  Versicolor     1.0000    0.8000    0.8889        10
+   Virginica     0.8750    1.0000    0.9333        14
 
-    accuracy                         0.9130        23
-   macro avg     0.9487    0.8889    0.9056        23
-weighted avg     0.9264    0.9130    0.9080        23
+    accuracy                         0.9333        30
+   macro avg     0.9583    0.9333    0.9407        30
+weighted avg     0.9417    0.9333    0.9319        30

@@ -9,6 +9,7 @@ def select_dataset(config): #config[data_parameters]
     dataset = config['dataset']
     batchsize = config['batch_size']
     augmentation = config.get('augmentation',False)
+    no_standardization = config.get('no_standardization',False)
         
     match dataset:
         case "MNIST":
@@ -38,6 +39,17 @@ def select_dataset(config): #config[data_parameters]
                     transforms.Normalize([mean],[std])
                 ]) 
 
+            if no_standardization:
+                # PILToTensor: 0~255 정수(Int) 텐서로 변환, Lambda: 그걸 실수(Float)로 변환
+                raw_float_transform = transforms.Compose([
+                    transforms.PILToTensor(),
+                    transforms.Lambda(lambda x: x.float())
+                ])
+
+                train.dataset.transform = raw_float_transform
+                validation.dataset.transform = raw_float_transform
+                test.transform = raw_float_transform
+
             train_data_loader = DataLoader(dataset=train, batch_size=batchsize,shuffle=True)
             validation_data_loader = DataLoader(dataset=validation, batch_size=batchsize,shuffle=True)
             test_data_loader = DataLoader(dataset=test, batch_size=batchsize,shuffle=True)
@@ -65,6 +77,17 @@ def select_dataset(config): #config[data_parameters]
                     transforms.Normalize([mean],[std])
                 ])
 
+            if no_standardization:
+                # PILToTensor: 0~255 정수(Int) 텐서로 변환, Lambda: 그걸 실수(Float)로 변환
+                raw_float_transform = transforms.Compose([
+                    transforms.PILToTensor(),
+                    transforms.Lambda(lambda x: x.float())
+                ])
+
+                train.dataset.transform = raw_float_transform
+                validation.dataset.transform = raw_float_transform
+                test.transform = raw_float_transform
+
             train_data_loader = DataLoader(dataset=train, batch_size=batchsize,shuffle=True)
             validation_data_loader = DataLoader(dataset=validation, batch_size=batchsize,shuffle=True)
             test_data_loader = DataLoader(dataset=test, batch_size=batchsize,shuffle=True)
@@ -76,9 +99,26 @@ def select_dataset(config): #config[data_parameters]
             x = torch.tensor(iris.data, dtype = torch.float32)
             y = torch.tensor(iris.target, dtype = torch.long)
 
-            mean = x.mean(dim=0) #평균
-            std = x.std(dim=0) #표준편차
-            x = (x-mean)/std #(원본 - 평균) / 표준편차 로 표준화
+            indices = torch.randperm(len(x)) #random permutation 랜덤 순열 (순서를 고려하여 일렬로 나열하거나 뒤섞음)
+            #정수 n하나를 입력받아 0~n-1까지의 정수가 무작위로 섞인 1차원 tensor를 반환함
+
+            x_train = x[indices[:90]]
+            y_train = y[indices[:90]]
+            
+            x_val = x[indices[90:120]]
+            y_val = y[indices[90:120]]
+            
+            x_test = x[indices[120:]]
+            y_test = y[indices[120:]]
+
+            if not no_standardization:
+                mean = x_train.mean(dim=0) #dim=0으로 [90,4] 모양을 평균내서 [4]로 만들어버림
+                std = x_train.std(dim=0)
+
+                x_train = (x_train - mean) / std
+                x_val = (x_val - mean) / std
+                x_test = (x_test - mean) / std
+            #(원본 - 평균) / 표준편차 로 표준화
             #mnist(fashion-mnist)의 경우 데이터가 0~255의 한정된 값을 가지고 있으며, 데이터가 0일 경우가 다수 존재함.
             #0을 표준화 시에 음의 실수가 될 가능성이 있기때문에 정규화를 통해 0을 0으로 유지 가능.
             #또한 0을 w+b에 통과 시켰을 때 b만 남기때문에 relu함수를 통과 시켰을 시 0과 아주 가까운 값(b)이 나오고
@@ -94,15 +134,9 @@ def select_dataset(config): #config[data_parameters]
             #iris를 정규화가 아닌 표준화 하는 이유는 iris의 경우 데이터가 한정된 값을 갖지 않으며, 만약 
             #평균적인 값보다 훨씬 큰 이상점이 데이터에 존재했을 때 정규화 시에 대부분의 값이 0 근처로 몰리는
             #현상을 피할 수 있도록 표준화 하는것을 지향함.
-
-            full_iris = TensorDataset(x,y)
-
-            total_size = len(full_iris)
-            train_size = int(total_size*0.7)
-            validation_size = int(total_size*0.15)
-            test_size = total_size - train_size - validation_size #test는 나머지 15%
-
-            train,validation,test = random_split(full_iris,[train_size,validation_size,test_size])
+            train = TensorDataset(x_train,y_train)
+            validation = TensorDataset(x_val,y_val)
+            test = TensorDataset(x_test,y_test)
 
             train_data_loader = DataLoader(dataset=train, batch_size=batchsize,shuffle=True)
             validation_data_loader = DataLoader(dataset=validation, batch_size=batchsize,shuffle=True)
