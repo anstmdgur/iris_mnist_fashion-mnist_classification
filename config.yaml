@@ -13,6 +13,7 @@
 #     dataset: "iris" , "MNIST" , "fashion-MNIST" 중 택1
 #     batch_size: 16
 #     augmentation: True (augmentation 미지정 시 False. augmentation 적용 안함. 반드시 mnist류 데이터 에서만 사용할것.)
+#     no_standardization: True (미지정 시 false)
 
 iris_mlp_baseline:
   model_parameters:
