@@ -20,7 +20,7 @@ def set_seed(seed):
     torch.backends.cudnn.deterministic = True 
     torch.backends.cudnn.benchmark = False 
 
-def main(config_name):
+def main(config_name,patience = 10):
     set_seed(42)
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -37,7 +37,7 @@ def main(config_name):
     my_model = model.select_model(model_parameters,device)
     optimizer = train.select_optimizer(my_model,train_parameters)
     scheduler = train.select_scheduler(optimizer,train_parameters)
-    early_stop = train.EarlyStopping() #iris patience
+    early_stop = train.EarlyStopping(patience=patience) #iris patience
     EPOCH = train_parameters['epochs']
 
     history = {'train_loss': [], 'val_loss': [], 'train_acc': [], 'val_acc': []}

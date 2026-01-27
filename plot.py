@@ -13,11 +13,8 @@ import numpy as np
 
 import time
 
-# 그래프를 누적해서 그리기 위해 함수 밖에서 Figure 생성
-plt.figure(figsize=(16, 8), dpi=300)
 
-# [추가됨 1] 그래프 순서를 세기 위한 전역 변수
-plot_cnt = 0
+plt.figure(figsize=(16, 8), dpi=300)
 
 def set_seed(seed):
     random.seed(seed)
@@ -28,10 +25,8 @@ def set_seed(seed):
     torch.backends.cudnn.deterministic = True 
     torch.backends.cudnn.benchmark = False 
 
-def main(config_name, color):
-    # [추가됨 2] 전역 변수 사용 선언
-    global plot_cnt
 
+def main(config_name, color,patience=15):
     set_seed(42)
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -49,7 +44,7 @@ def main(config_name, color):
     optimizer = train.select_optimizer(my_model,train_parameters)
     scheduler = train.select_scheduler(optimizer,train_parameters)
     
-    early_stop = train.EarlyStopping() 
+    early_stop = train.EarlyStopping(patience=patience) 
 
     EPOCH = train_parameters['epochs']
 
@@ -83,51 +78,44 @@ def main(config_name, color):
     avg_time_per_epoch = total_time/real_epoch
     print(f"total time = {total_time}sec.    avg time per epoch = {avg_time_per_epoch}sec.\n")
 
-    # --- 그래프 그리기 및 최적 지점 표시 ---
+
     epochs = range(1, len(history['val_loss']) + 1)
     
-    plt.plot(epochs, history['val_loss'], color, label=f'{config_name}')
-
     best_loss_idx = np.argmin(history['val_loss']) 
     best_epoch = best_loss_idx + 1
     best_val_loss = history['val_loss'][best_loss_idx]
 
-    plt.scatter(best_epoch, best_val_loss, color=color[0], s=50, zorder=5)
-    
-    # [수정됨 3] plt.text 대신 plt.annotate 사용
-    # plot_cnt가 증가할 때마다 텍스트 위치(xytext)를 y축으로 20포인트씩 위로 올립니다.
-    # arrowprops: 텍스트가 멀어져도 점과 텍스트를 선으로 이어줍니다.
-    plt.annotate(
-        f"Loss: {best_val_loss:.4f}\nEpoch: {best_epoch}", # 표시할 텍스트
-        xy=(best_epoch, best_val_loss),                    # 점의 위치 (화살표 끝)
-        xytext=(10, 20 + plot_cnt * 20),                   # 텍스트 위치 (점보다 얼마나 떨어질지) -> cnt에 따라 높아짐
-        textcoords='offset points',                        # 좌표 기준 (포인트 단위 오프셋)
-        ha='left', va='bottom',                            # 정렬
-        fontsize=9, fontweight='bold',
-        arrowprops=dict(arrowstyle='->', connectionstyle='arc3,rad=0', color='gray') # 화살표 설정
-    )
+    label_str = f"{config_name} (L:{best_val_loss:.4f}/Ep:{best_epoch})"
 
-    plt.ticklabel_format(style='plain', axis='x')
-    plt.locator_params(axis='x', nbins=20)
-    
-    # [추가됨 4] 다음 그래프를 위해 카운트 증가
-    plot_cnt += 1
+    z_ord = 10 if '--' in color else 2
+    plt.plot(epochs, history['val_loss'], color, label=label_str, zorder=z_ord)
+    plt.scatter(best_epoch, best_val_loss, color=color[0], s=50, zorder=z_ord+1)
     
     return dataset
-    
-# dataset = main('iris_mlp_adam', 'r-')    
-# main('iris_mlp_baseline', 'b-')          
-# main('iris_mlp_high_lr', 'g-')             
-# main('iris_mlp_low_lr', 'k-')               
-# main('iris_mlp_high_batch', 'm-')       
-# main('iris_mlp_low_batch', 'c-')       
-# main('iris_mlp_no_standardization', 'y-')
 
-dataset = main('mnist_mlp_baseline', 'r-')    
-main('mnist_mlp_one_hot', 'b-')          
-main('mnist_mlp_no_standardization', 'g-')             
-main('mnist_cnn', 'k-')
-main('mnist_cnn_depth_2', 'm-')       
+#patience = 10
+# dataset = main('iris_mlp_adam','r-')
+# main('iris_mlp_baseline','b-')
+# main('iris_mlp_high_lr','g-')
+# main('iris_mlp_low_lr','k-')
+# main('iris_mlp_high_batch','m-')
+# main('iris_mlp_low_batch','c-')
+# main('iris_mlp_no_standardization','y-')
+
+# dataset = main('mnist_mlp_baseline','k-')
+# main('mnist_mlp_one_hot','y--')
+# main('mnist_mlp_no_standardization','g-')
+# main('mnist_cnn','b-')
+# main('mnist_cnn_depth_2', 'r-')
+
+#patience = 15로 변경 후 실행
+dataset = main('fashion-mnist_cnn_baseline', 'k-')
+main('fashion-mnist_cnn_dropout','b-')
+main('fashion-mnist_cnn_bn','g-')
+main('fashion-mnist_cnn_scheduler','y--')
+main('fashion-mnist_cnn_aug','m-')
+main('fashion-mnist_cnn_improved','r-',patience=20)
+
 
 plt.legend()
 plt.title(f'{dataset} Validation Loss')
