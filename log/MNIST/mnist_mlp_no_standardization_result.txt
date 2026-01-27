@@ -1,10 +1,10 @@
 mnist_mlp_no_standardization model
 
 Train : Acc 97.15% | Loss 0.1050
-Val   : Acc 95.89% | Loss 0.1951
-Test  : Acc 95.92% | Loss 0.1996
+Val   : Acc 95.89% | Loss 0.1955
+Test  : Acc 95.92% | Loss 0.1991
 
-total time = 67.68092966079712sec.   avg time per epoch = 4.512061977386475sec.
+total time = 68.75484991073608sec.   avg time per epoch = 4.5836566607157385sec.
 
               precision    recall  f1-score   support
 

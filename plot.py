@@ -22,8 +22,12 @@ def set_seed(seed):
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
     torch.backends.cudnn.deterministic = True 
     torch.backends.cudnn.benchmark = False 
+
+    os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
+    torch.use_deterministic_algorithms(True)
 
 
 def main(config_name, color,patience=15):
@@ -65,6 +69,7 @@ def main(config_name, color,patience=15):
         history['val_loss'].append(val_avg_loss)
         history['train_acc'].append(train_avg_accuracy)
         history['val_acc'].append(val_avg_accuracy)
+        
         if ep % 5 == 0:
             print(f"epoch = {ep} train loss = {train_avg_loss} train acc = {train_avg_accuracy} val loss = {val_avg_loss} val acc = {val_avg_accuracy}\n")
 
@@ -94,7 +99,9 @@ def main(config_name, color,patience=15):
     return dataset
 
 #patience = 10
-# dataset = main('iris_mlp_adam','r-')
+
+# dataset = "iris"
+# main('iris_mlp_adam','r-')
 # main('iris_mlp_baseline','b-')
 # main('iris_mlp_high_lr','g-')
 # main('iris_mlp_low_lr','k-')
@@ -102,14 +109,17 @@ def main(config_name, color,patience=15):
 # main('iris_mlp_low_batch','c-')
 # main('iris_mlp_no_standardization','y-')
 
-# dataset = main('mnist_mlp_baseline','k-')
+# dataset = "MNIST"
+# main('mnist_mlp_baseline','k-')
 # main('mnist_mlp_one_hot','y--')
 # main('mnist_mlp_no_standardization','g-')
 # main('mnist_cnn','b-')
 # main('mnist_cnn_depth_2', 'r-')
 
 #patience = 15로 변경 후 실행
-dataset = main('fashion-mnist_cnn_baseline', 'k-')
+
+dataset = "fashion-MNIST"
+main('fashion-mnist_cnn_baseline', 'k-')
 main('fashion-mnist_cnn_dropout','b-')
 main('fashion-mnist_cnn_bn','g-')
 main('fashion-mnist_cnn_scheduler','y--')

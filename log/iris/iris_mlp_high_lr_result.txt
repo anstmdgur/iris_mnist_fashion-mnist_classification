@@ -1,10 +1,10 @@
 iris_mlp_high_lr model
 
-Train : Acc 98.89% | Loss 0.0375
-Val   : Acc 100.00% | Loss 0.0458
-Test  : Acc 90.00% | Loss 0.1657
+Train : Acc 98.89% | Loss 0.0400
+Val   : Acc 100.00% | Loss 0.0453
+Test  : Acc 90.00% | Loss 0.1605
 
-total time = 1.0126702785491943sec.   avg time per epoch = 0.017163903026257532sec.
+total time = 0.9589533805847168sec.   avg time per epoch = 0.016253447128554522sec.
 
               precision    recall  f1-score   support
 

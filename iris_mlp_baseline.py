@@ -17,8 +17,12 @@ def set_seed(seed):
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
     torch.backends.cudnn.deterministic = True 
     torch.backends.cudnn.benchmark = False 
+
+    os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
+    torch.use_deterministic_algorithms(True)
 
 def main(config_name,patience = 10):
     set_seed(42)
@@ -95,10 +99,10 @@ def main(config_name,patience = 10):
     print(f"{config_name} training end.\n")
 
 
-main("iris_mlp_baseline")
 main("iris_mlp_adam")
-main("iris_mlp_low_batch")
-main("iris_mlp_high_batch")
-main("iris_mlp_low_lr")
+main("iris_mlp_baseline")
 main("iris_mlp_high_lr")
+main("iris_mlp_low_lr")
+main("iris_mlp_high_batch")
+main("iris_mlp_low_batch")
 main("iris_mlp_no_standardization")

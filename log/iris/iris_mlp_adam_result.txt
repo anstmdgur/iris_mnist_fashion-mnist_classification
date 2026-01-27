@@ -1,17 +1,17 @@
 iris_mlp_adam model
 
-Train : Acc 98.89% | Loss 0.0219
-Val   : Acc 100.00% | Loss 0.0473
-Test  : Acc 93.33% | Loss 0.1582
+Train : Acc 100.00% | Loss 0.0138
+Val   : Acc 100.00% | Loss 0.0305
+Test  : Acc 90.00% | Loss 0.1730
 
-total time = 0.628460168838501sec.   avg time per epoch = 0.01611436330355131sec.
+total time = 1.299729585647583sec.   avg time per epoch = 0.023209456886563982sec.
 
               precision    recall  f1-score   support
 
       Setosa     1.0000    1.0000    1.0000         6
-  Versicolor     1.0000    0.8000    0.8889        10
-   Virginica     0.8750    1.0000    0.9333        14
+  Versicolor     0.8889    0.8000    0.8421        10
+   Virginica     0.8667    0.9286    0.8966        14
 
-    accuracy                         0.9333        30
-   macro avg     0.9583    0.9333    0.9407        30
-weighted avg     0.9417    0.9333    0.9319        30
+    accuracy                         0.9000        30
+   macro avg     0.9185    0.9095    0.9129        30
+weighted avg     0.9007    0.9000    0.8991        30

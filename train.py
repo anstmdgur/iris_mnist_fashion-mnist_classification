@@ -24,7 +24,6 @@ def model_train(dataloader,model,optimizer,scheduler,device,config): #config[tra
     model.train()#dropout과 bn에 대해서 전부 활성화가 되도록 레이어 동작 방식을 설정함
 
     train_loss_sum = train_correct = train_total = 0
-    total_train_batch = len(dataloader)
 
     one_hot = config.get('one_hot',False)
     loss_func = nn.CrossEntropyLoss()
@@ -50,7 +49,7 @@ def model_train(dataloader,model,optimizer,scheduler,device,config): #config[tra
         loss.backward()
         optimizer.step()
 
-        train_loss_sum += loss.item() #전체 loss
+        train_loss_sum += loss.item() * image.size(0) #전체 loss
 
         train_total += y_train.size(0) # 트레이닝 횟수 저장. batchsize를 계속해서 더해줌
         train_correct += ((torch.argmax(output,1)) == y_train).sum().item() #output이 정답과 일치하는 횟수를 전부 저장
@@ -58,7 +57,7 @@ def model_train(dataloader,model,optimizer,scheduler,device,config): #config[tra
     if scheduler is not None:
         scheduler.step()
 
-    train_avg_loss = train_loss_sum / total_train_batch # 트레이닝 횟수 (전체데이터 / 배치사이즈)
+    train_avg_loss = train_loss_sum / train_total # 트레이닝 횟수 (전체데이터 / 배치사이즈)
     train_avg_accuracy = 100*train_correct / train_total # 51000회중 맞힌 횟수에 100을 곱해 %로 변환
 
     return train_avg_loss,train_avg_accuracy
@@ -74,7 +73,6 @@ def model_evaluate(dataloader,model,device,config):
     with torch.no_grad(): #autograd에게 미분계산할 필요 없다고 알려줌. 각 tensor의 grad속성이 업데이트되지 않음.
 
         val_loss_sum = val_correct = val_total = 0
-        total_val_batch = len(dataloader)
         
         for image,label in dataloader: 
             x_val = image.to(device)
@@ -86,18 +84,18 @@ def model_evaluate(dataloader,model,device,config):
                 loss = loss_func(output,y_one_hot)
             else:
                 loss = loss_func(output,y_val)
-            val_loss_sum += loss.item()
+            val_loss_sum += loss.item() * image.size(0)
 
             val_total += y_val.size(0)
             val_correct += ((torch.argmax(output,1)) == y_val).sum().item() 
         
-    val_avg_loss = val_loss_sum / total_val_batch
+    val_avg_loss = val_loss_sum / val_total
     val_avg_accuracy = 100*val_correct / val_total 
 
     return val_avg_loss,val_avg_accuracy
 
 class EarlyStopping(): #함수가 아닌 class로 정의하는 이유는 이전 state를 기억하기 위함 (best_score, epoch)
-    def __init__(self,patience = 10, delta = 0.0,verbose = True):
+    def __init__(self,patience = 10, delta = 0.001,verbose = True):
         self.patience = patience #성능이 향상되지 않아도 참을 횟수
         self.delta = delta #성능 향상을 인정할 최소 값
         self.verbose = verbose #관련 메시지 출력 여부

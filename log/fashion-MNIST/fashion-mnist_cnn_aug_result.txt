@@ -1,10 +1,10 @@
 fashion-mnist_cnn_aug model
 
 Train : Acc 94.30% | Loss 0.1532
-Val   : Acc 92.96% | Loss 0.2001
-Test  : Acc 92.50% | Loss 0.2151
+Val   : Acc 92.96% | Loss 0.2002
+Test  : Acc 92.50% | Loss 0.2159
 
-total time = 613.8503589630127sec.   avg time per epoch = 13.641119088066949sec.
+total time = 638.4351682662964sec.   avg time per epoch = 14.187448183695475sec.
 
               precision    recall  f1-score   support
 

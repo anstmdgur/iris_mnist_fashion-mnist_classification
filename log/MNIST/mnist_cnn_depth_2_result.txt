@@ -1,10 +1,10 @@
 mnist_cnn_depth_2 model
 
 Train : Acc 99.74% | Loss 0.0079
-Val   : Acc 98.82% | Loss 0.0377
-Test  : Acc 98.88% | Loss 0.0356
+Val   : Acc 98.82% | Loss 0.0372
+Test  : Acc 98.88% | Loss 0.0358
 
-total time = 155.12855100631714sec.   avg time per epoch = 9.695534437894821sec.
+total time = 158.6380898952484sec.   avg time per epoch = 9.914880618453026sec.
 
               precision    recall  f1-score   support
 

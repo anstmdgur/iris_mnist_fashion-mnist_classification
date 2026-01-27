@@ -80,8 +80,8 @@ iris_mlp_low_lr:
     model : "iris_MLP"
     dropout_p: 0.0
   train_parameters:
-    lr: 0.001
-    epochs: 500
+    lr: 0.005
+    epochs: 3000
     optim: 'SGD'
   data_parameters:
     dataset: "iris"
