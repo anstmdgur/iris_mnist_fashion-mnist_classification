@@ -21,7 +21,7 @@ iris_mlp_baseline:
     dropout_p: 0.0
   train_parameters:
     lr: 0.01
-    epochs: 200
+    epochs: 500
     optim: 'SGD'
   data_parameters:
     dataset: "iris"
@@ -33,7 +33,7 @@ iris_mlp_no_standardization:
     dropout_p: 0.0
   train_parameters:
     lr: 0.01
-    epochs: 200
+    epochs: 500
     optim: 'SGD'
   data_parameters:
     dataset: "iris"
@@ -69,11 +69,11 @@ iris_mlp_high_batch:
     dropout_p: 0.0
   train_parameters:
     lr: 0.01
-    epochs: 200
+    epochs: 1500
     optim: 'SGD'
   data_parameters:
     dataset: "iris"
-    batch_size: 32
+    batch_size: 16
 
 iris_mlp_low_lr:
   model_parameters:
@@ -81,7 +81,7 @@ iris_mlp_low_lr:
     dropout_p: 0.0
   train_parameters:
     lr: 0.001
-    epochs: 200
+    epochs: 500
     optim: 'SGD'
   data_parameters:
     dataset: "iris"

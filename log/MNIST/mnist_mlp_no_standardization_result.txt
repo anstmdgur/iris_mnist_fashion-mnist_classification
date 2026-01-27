@@ -4,7 +4,7 @@ Train : Acc 97.15% | Loss 0.1050
 Val   : Acc 95.89% | Loss 0.1951
 Test  : Acc 95.92% | Loss 0.1996
 
-total time = 55.82748818397522sec.   avg time per epoch = 3.721832545598348sec.
+total time = 67.68092966079712sec.   avg time per epoch = 4.512061977386475sec.
 
               precision    recall  f1-score   support
 
